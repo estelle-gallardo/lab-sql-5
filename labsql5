@@ -1,0 +1,49 @@
+USE sakila;
+-- 1 drop columns picture
+ALTER TABLE staff
+	DROP COLUMN picture;
+-- 2 insert new staff: Tammy
+
+INSERT INTO staff  VALUES (
+    3,
+    'TAMMY',
+    'SANDERS',
+    79,
+    'TAMMY.SANDRES@sakilacustomer.org',
+    2,
+    1,
+    'tammy',
+    '',
+    NOW()
+);
+
+-- 3 insert Mike Hillyer 
+INSERT INTO customer VALUE(
+601,
+1,
+'Mike',
+'Hillyer',
+'MIKE.HILLYER@sakilacustomer.org',
+79,
+1,
+NOW(),
+now()
+);
+
+-- 4 Delete non-active users, but first,
+--  create a backup table deleted_users to store customer_id, email, and the date for the users that would be deleted.
+
+CREATE  TABLE IF NOT EXISTS backup AS 
+SELECT *  
+FROM customer 
+WHERE active = 0;
+DELETE rental FROM rental
+INNER JOIN backup 
+ON  rental.customer_id = backup.customer_id;
+DELETE payment FROM payment
+INNER JOIN backup
+ON payment.customer_id = backup.customer_id;
+DELETE customer FROM customer
+INNER JOIN backup
+ON customer.customer_id = backup.customer_id;
+DROP TABLE IF EXISTS backup;
